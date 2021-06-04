@@ -1,16 +1,15 @@
-# hello-express
+# Spotify Song Recommender
 
-A server that serves a webpage, its resources, and some data
+A simple app the recommends three songs based on a given song (title + artist)
 
 
 ## Your Project
 
 On the front-end,
 
-- Edit `views/index.html` to change the content of the webpage
-- `public/client.js` is the javacript that runs when you load the webpage
-- `public/style.css` is the styles for `views/index.html`
-- Drag in `assets`, like images or music, to add them to your project
+- `public/index.html` contains the content of the webpage
+- `public/script.js` is the javacript that runs when you load the webpage
+- `public/style.css` is the styles for `public/index.html`
 
 On the back-end,
 
