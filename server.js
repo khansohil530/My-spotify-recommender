@@ -30,13 +30,13 @@ app.get("/", (req, res) => {
 
 app.post("/recommendations", async (req, res) => {
   if(!req.body) {
-    res.status(400).send({ status: "error", message: "Bad Request - must send a JSON body with track and artist" })
+    return res.status(400).send({ status: "error", message: "Bad Request - must send a JSON body with track and artist" })
   }
   
   const { track, artist } = req.body
   
   if(!track || !artist) {
-    res.status(400).send({ status: "error", message: "Bad Request - must past a track and artist" })
+    return res.status(400).send({ status: "error", message: "Bad Request - must past a track and artist" })
   }
   
   // 1. try to get access token from Spotify 
@@ -97,7 +97,6 @@ app.post("/recommendations", async (req, res) => {
     return res.status(500).send({ status: "error", message: "Internal Server Error" })
   }
 });
-  console.log('CHECKPOINT 3')
 
 
 // after our app has been set up above, start listening on a port provided by Glitch
