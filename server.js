@@ -46,15 +46,15 @@ app.post("/recommendations", async (req, res) => {
     accessToken = await getAccessToken()
   } catch(err) {
     console.error(err.message)
-    res.status(500).send({ status: "error", message: "Internal Server Error"})
+    return res.status(500).send({ status: "error", message: "Internal Server Error"})
   }  
   
   // add the access token as a header to authorize all future axios requests
   // see axios docs: https://github.com/axios/axios#interceptors
-  axios.interceptors.request.use(function(config) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-    return config;
-  }, function(err) {
+  axios.interceptors.request.use((req) => {
+    req.headers.Authorization = `Bearer ${accessToken}`;
+    return req;
+  }, (err) => {
     return Promise.reject(err);
   });
   
@@ -67,33 +67,37 @@ app.post("/recommendations", async (req, res) => {
     
     // if no songs returned in search, send a 404 response
     if(!tracks || !tracks.items || !tracks.items.length ) {
-      res.status(404).send({ message: "Song not found." })
+      return res.status(404).send({ message: "Song not found." })
     }
     
     // save the first search result's trackId to a variable
     trackId = tracks.items[0].id
   } catch(err) {
     console.error(err.message)
-    res.status(500).send({ status: "error", message: "Error when searching tracks" })
+    return res.status(500).send({ status: "error", message: "Error when searching tracks" })
   }
+  
+    
   
   // 3. get song recommendations
   try {
     const result = await getRecommendations({ trackId })
+    console.log({result})
     const { tracks } = result
 
     // if no songs returned in search, send a 404 response
     if(!tracks || !tracks.length ) {
-      res.status(404).send({ message: "No recommendations found." })
+      return res.status(404).send({ message: "No recommendations found." })
     }
     
     // Success! Send track recommendations back to client
-    res.send({ tracks })
+    return res.send({ tracks })
   } catch(err) {
     console.error(err.message)
-    res.status(500).send({ status: "error", message: "Internal Server Error" })
+    return res.status(500).send({ status: "error", message: "Internal Server Error" })
   }
 });
+  console.log('CHECKPOINT 3')
 
 
 // after our app has been set up above, start listening on a port provided by Glitch
