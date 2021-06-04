@@ -49,11 +49,20 @@ app.post("/recommendations", async (req, res) => {
     res.status(500).send({ status: "error", message: "Internal Server Error"})
   }  
   
+  // add the access token as a header to authorize all future axios requests
+  // see axios docs: https://github.com/axios/axios#interceptors
+  axios.interceptors.request.use(function(config) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+    return config;
+  }, function(err) {
+    return Promise.reject(err);
+  });
+  
   // 2. get track id from search
   let trackId;
   
   try {
-    const result = await searchTracks(accessToken, { track: 'dancing queen', artist: 'abba'})
+    const result = await searchTracks({ track: 'dancing queen', artist: 'abba'})
     const { tracks } = result
     
     // if no songs returned in search, send a 404 response
@@ -70,7 +79,7 @@ app.post("/recommendations", async (req, res) => {
   
   // 3. get song recommendations
   try {
-    const result = await getRecommendations(accessToken, { trackId })
+    const result = await getRecommendations({ trackId })
     const { tracks } = result
 
     // if no songs returned in search, send a 404 response
