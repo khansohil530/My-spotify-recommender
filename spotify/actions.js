@@ -1,5 +1,4 @@
 const axios = require("axios")
-const qs = require("qs")
 
 const BASE_URL = "https://api.spotify.com/v1"
 
@@ -19,7 +18,6 @@ const getRecommendations = ({ trackId }) => {
   const config = {
     method: 'get',
     url: `${BASE_URL}/recommendations?seed_tracks=${trackId}`,
-
   };
 
   return axios(config)

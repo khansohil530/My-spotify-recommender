@@ -8,6 +8,9 @@ const axios = require("axios");
 const { getAccessToken } = require("./spotify/auth");
 const { searchTracks, getRecommendations } = require("./spotify/actions");
 
+
+const BASE_URL = "https://api.spotify.com/v1"
+
 // initialize an express instance called 'app' 
 const app = express();
 
@@ -66,7 +69,12 @@ app.post("/recommendations", async (req, res) => {
   let trackId;
   
   try {
-    const result = await searchTracks({ track: 'dancing queen', artist: 'abba'})
+    const config = {
+      method: 'get',
+      url: `${BASE_URL}/search?q=track:${track}+artist:${artist}&type=track`,
+    };
+
+    const result = await http(config).then((res) => res.data)
     const { tracks } = result
     
     // if no songs returned in search, send a 404 response
@@ -85,7 +93,12 @@ app.post("/recommendations", async (req, res) => {
   
   // 3. get song recommendations
   try {
-    const result = await getRecommendations({ trackId })
+    const config = {
+      method: 'get',
+      url: `${BASE_URL}/recommendations?seed_tracks=${trackId}`,
+    };
+    
+    const result = await http(config).then(res=>res.data)
     const { tracks } = result
 
     // if no songs returned in search, send a 404 response
