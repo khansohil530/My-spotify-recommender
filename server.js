@@ -42,26 +42,16 @@ app.post("/recommendations", async (req, res) => {
     return res.status(400).send({ status: "error", message: "Bad Request - must past a track and artist" })
   }
   
-  // 1. try to get access token from Spotify 
-//   let accessToken;
-  
-//   try {
-//     accessToken = await getAccessToken()
-//     console.log({accessToken})
-//   } catch(err) {
-//     console.error(err.message)
-//     return res.status(500).send({ status: "error", message: "Internal Server Error"})
-//   }  
-  
+  // 1. create an instance of axios try to set up Auhtorization header on all requests
   const http = axios.create()
   
-  // add the access token as a header to authorize all future axios requests
   // see axios docs: https://github.com/axios/axios#interceptors
   http.interceptors.request.use(async (req) => {
     const accessToken = await getAccessToken()
     req.headers.Authorization = `Bearer ${accessToken}`;
     return req;
   }, (err) => {
+    console.error(err.message)
     return Promise.reject(err);
   });
   
@@ -74,8 +64,8 @@ app.post("/recommendations", async (req, res) => {
       url: `${BASE_URL}/search?q=track:${track}+artist:${artist}&type=track`,
     };
 
-    const result = await http(config).then((res) => res.data)
-    const { tracks } = result
+    const spotifyRes = await http(config)
+    const { tracks } = spotifyRes.data
     
     // if no songs returned in search, send a 404 response
     if(!tracks || !tracks.items || !tracks.items.length ) {
@@ -89,8 +79,6 @@ app.post("/recommendations", async (req, res) => {
     return res.status(500).send({ status: "error", message: "Error when searching tracks" })
   }
   
-    
-  
   // 3. get song recommendations
   try {
     const config = {
@@ -98,8 +86,8 @@ app.post("/recommendations", async (req, res) => {
       url: `${BASE_URL}/recommendations?seed_tracks=${trackId}`,
     };
     
-    const result = await http(config).then(res=>res.data)
-    const { tracks } = result
+    const spotifyRes = await http(config)
+    const { tracks } = spotifyRes.data
 
     // if no songs returned in search, send a 404 response
     if(!tracks || !tracks.length ) {
