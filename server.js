@@ -44,6 +44,7 @@ app.post("/recommendations", async (req, res) => {
   
   try {
     accessToken = await getAccessToken()
+    console.log({accessToken})
   } catch(err) {
     console.error(err.message)
     return res.status(500).send({ status: "error", message: "Internal Server Error"})
@@ -82,7 +83,6 @@ app.post("/recommendations", async (req, res) => {
   // 3. get song recommendations
   try {
     const result = await getRecommendations({ trackId })
-    console.log({result})
     const { tracks } = result
 
     // if no songs returned in search, send a 404 response
