@@ -50,9 +50,11 @@ app.post("/recommendations", async (req, res) => {
 //     return res.status(500).send({ status: "error", message: "Internal Server Error"})
 //   }  
   
+  const http = axios.create()
+  
   // add the access token as a header to authorize all future axios requests
   // see axios docs: https://github.com/axios/axios#interceptors
-  axios.interceptors.request.use(async (req) => {
+  http.interceptors.request.use(async (req) => {
     const accessToken = await getAccessToken()
     req.headers.Authorization = `Bearer ${accessToken}`;
     return req;
