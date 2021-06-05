@@ -6,8 +6,6 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken } = require("./spotify/auth");
-const { searchTracks, getRecommendations } = require("./spotify/actions");
-
 
 const BASE_URL = "https://api.spotify.com/v1"
 
