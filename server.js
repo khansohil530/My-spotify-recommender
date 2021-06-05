@@ -6,6 +6,7 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken } = require("./spotify/auth");
+const { searchTracks, getRecommendations } = require("./spotify/actions");
 
 const BASE_URL = "https://api.spotify.com/v1"
 
@@ -31,22 +32,28 @@ app.get("/", (req, res) => {
 
 app.post("/recommendations", async (req, res) => {
   if(!req.body) {
-    return res.status(400).send({ status: "error", message: "Bad Request - must send a JSON body with track and artist" })
+    return res.status(400).send({ 
+      status: "error", 
+      message: "Bad Request - must send a JSON body with track and artist"
+    })
   }
   
   const { track, artist } = req.body
   
   if(!track || !artist) {
-    return res.status(400).send({ status: "error", message: "Bad Request - must past a track and artist" })
+    return res.status(400).send({ 
+      status: "error", 
+      message: "Bad Request - must past a track and artist" 
+    })
   }
   
   // 1. create an instance of axios try to set up Auhtorization header on all requests
   const http = axios.create()
   
   // see axios docs: https://github.com/axios/axios#interceptors
-  http.interceptors.request.use(async (req) => {
+  http.interceptors.request.use(async (config) => {
     const accessToken = await getAccessToken()
-    req.headers.Authorization = `Bearer ${accessToken}`;
+    config.headers.Authorization = `Bearer ${accessToken}`;
     return req;
   }, (err) => {
     console.error(err.message)
@@ -57,13 +64,8 @@ app.post("/recommendations", async (req, res) => {
   let trackId;
   
   try {
-    const config = {
-      method: 'get',
-      url: `${BASE_URL}/search?q=track:${track}+artist:${artist}&type=track`,
-    };
-
-    const spotifyRes = await http(config)
-    const { tracks } = spotifyRes.data
+    const result = await searchTracks(http, { track, artist })
+    const { tracks } = result
     
     // if no songs returned in search, send a 404 response
     if(!tracks || !tracks.items || !tracks.items.length ) {
@@ -79,13 +81,8 @@ app.post("/recommendations", async (req, res) => {
   
   // 3. get song recommendations
   try {
-    const config = {
-      method: 'get',
-      url: `${BASE_URL}/recommendations?seed_tracks=${trackId}`,
-    };
-    
-    const spotifyRes = await http(config)
-    const { tracks } = spotifyRes.data
+    const result = await getRecommendations(http, { trackId })
+    const { tracks } = result
 
     // if no songs returned in search, send a 404 response
     if(!tracks || !tracks.length ) {
@@ -96,7 +93,7 @@ app.post("/recommendations", async (req, res) => {
     return res.send({ tracks })
   } catch(err) {
     console.error(err.message)
-    return res.status(500).send({ status: "error", message: "Internal Server Error" })
+    return res.status(500).send({ status: "error", message: "Something went wrong when fetching recommendations" })
   }
 });
 
