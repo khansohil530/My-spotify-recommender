@@ -38,6 +38,7 @@ app.post("/recommendations", async (req, res) => {
     })
   }
   
+  console.log("checkpoint 1")
   const { track, artist } = req.body
   
   if(!track || !artist) {
@@ -60,6 +61,9 @@ app.post("/recommendations", async (req, res) => {
     return Promise.reject(err);
   });
   
+  console.log(http)
+  console.log("checkpoint 2")
+  
   // 2. get track id from search
   let trackId;
   
@@ -77,6 +81,8 @@ app.post("/recommendations", async (req, res) => {
     console.error(err.message)
     return res.status(500).send({ status: "error", message: "Error when searching tracks" })
   }
+  
+  console.log("checkpoint 3")
   
   // 3. get song recommendations
   try {
