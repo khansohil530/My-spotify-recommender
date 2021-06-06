@@ -57,27 +57,14 @@ app.post("/recommendations", async (req, res) => {
     return res.status(500).send({ message: "Something went wrong when fetching access token" })
   }
   
-  
   // Create an instance of axios to apply access token to all request headers
-  const http = axios.create()
-  
-  // See axios docs: https://github.com/axios/axios#interceptors
-  http.interceptors.request.use(async (config) => {
-    console.log('entered interceptor')
-    config.headers.Authorization = `Bearer ${accessToken}`;
-    return req;
-  }, (err) => {
-    console.error(err.message)
-    return Promise.reject(err);
-  });
-  
-  console.log("checkpoint 2")
+  const http = axios.create({ headers: {'Authorization': `Bearer ${accessToken}`}})
   
   // 2. get track id from search
   let trackId;
   
   try {
-    const result = await searchTracks(accessToken, { track, artist })
+    const result = await searchTracks(http, { track, artist })
     const { tracks } = result
     
     if(!tracks || !tracks.items || !tracks.items.length ) {
@@ -90,8 +77,6 @@ app.post("/recommendations", async (req, res) => {
     console.error(err.message)
     return res.status(500).send({ status: "error", message: "Error when searching tracks" })
   }
-  
-  console.log("checkpoint 3")
   
   // 3. get song recommendations
   try {

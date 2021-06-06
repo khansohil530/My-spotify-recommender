@@ -6,11 +6,9 @@ const BASE_URL = "https://api.spotify.com/v1"
 const searchTracks = (http, { track, artist }) => {
   const config = {
     method: 'get',
-    url: `${BASE_URL}/search?q=track:${track}+artist:${artist}&type=track`,
+    url: `${BASE_URL}/search?q=track:${track}+artist:${artist}&type=track`
   };
   
-  console.log({config})
-
   return http(config)
     .then((res) => res.data).catch(e => console.log(e.message))
 }
