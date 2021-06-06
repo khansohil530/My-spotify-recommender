@@ -24,7 +24,14 @@ const submitForm = async (event) => {
     const artist = elements.artist.value
 
     // send a POST request to the backend /recommendations path to get song recommendations
-    const result = await axios.post("/recommendations", { track, artist })
+    let result
+    try {
+      result = await axios.post("/recommendations", { track, artist })
+    }catch (err) {
+      const errMsg = err.response.data.message ? err.response.data.message : "Something went wrong"
+      return alert(errMsg)
+    }
+    
     const recommendations = result.data.tracks
 
     // get top 3 recommendations

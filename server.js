@@ -32,20 +32,13 @@ app.get("/", (req, res) => {
 
 app.post("/recommendations", async (req, res) => {
   if(!req.body) {
-    return res.status(400).send({ 
-      status: "error", 
-      message: "Bad Request - must send a JSON body with track and artist"
-    })
+    return res.status(400).send({ message: "Bad Request - must send a JSON body with track and artist" })
   }
   
-  console.log("checkpoint 1")
   const { track, artist } = req.body
   
   if(!track || !artist) {
-    return res.status(400).send({ 
-      status: "error", 
-      message: "Bad Request - must past a track and artist" 
-    })
+    return res.status(400).send({ message: "Bad Request - must past a track and artist" })
   }
   
   // 1. Get access token
@@ -58,7 +51,7 @@ app.post("/recommendations", async (req, res) => {
   }
   
   // Create an instance of axios to apply access token to all request headers
-  const http = axios.create({ headers: {'Authorization': `Bearer ${accessToken}`}})
+  const http = axios.create({ headers: { 'Authorization': `Bearer ${accessToken}` }})
   
   // 2. get track id from search
   let trackId;
@@ -68,7 +61,7 @@ app.post("/recommendations", async (req, res) => {
     const { tracks } = result
     
     if(!tracks || !tracks.items || !tracks.items.length ) {
-      return res.status(404).send({ message: "Song not found." })
+      return res.status(404).send({ message: `Song '${track}' by ${artist} not found.` })
     }
     
     // save the first search result's trackId to a variable
@@ -95,7 +88,6 @@ app.post("/recommendations", async (req, res) => {
     return res.status(500).send({ status: "error", message: "Something went wrong when fetching recommendations" })
   }
 });
-
 
 // after our app has been set up above, start listening on a port provided by Glitch
 app.listen(process.env.PORT, () => {
