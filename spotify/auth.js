@@ -25,7 +25,7 @@ const getAccessToken = async () => {
   };
   
   // Make a post request with axios to Spotify to get access token with client credentials
-  return axios(authOptions).then(res => res.data.access_token).catch(err => console.error({err}))
+  return axios(authOptions).then(res => res.data.access_token)
 }
 
 // export the functions so we can use them in server.js
