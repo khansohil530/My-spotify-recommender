@@ -48,15 +48,22 @@ app.post("/recommendations", async (req, res) => {
     })
   }
   
+  // 1. Get access token
+  let accessToken
+  try {
+    accessToken = await getAccessToken()
+  } catch(err) {
+    console.error(err.message)
+    return res.status(500).send({ message: "Something went wrong when fetching access token" })
+  }
   
-  const accessToken = await getAccessToken()
   
-  // 1. Create an instance of axios to apply access token to all request headers
+  // Create an instance of axios to apply access token to all request headers
   const http = axios.create()
   
   // See axios docs: https://github.com/axios/axios#interceptors
   http.interceptors.request.use(async (config) => {
-    
+    console.log('entered interceptor')
     config.headers.Authorization = `Bearer ${accessToken}`;
     return req;
   }, (err) => {
