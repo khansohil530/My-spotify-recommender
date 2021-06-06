@@ -6,7 +6,7 @@ const SPOTIFY_ACCESS_TOKEN_URL = "https://accounts.spotify.com/api/token"
 // This function uses Client Credentials to obtain an access token from Spotify
 // See Spotify auth documentation: https://developer.spotify.com/documentation/general/guides/authorization-guide/#client-credentials-flow
 const getAccessToken = async () => {
-  // For the Authorization header, Spotify requires a base64 encoded token made of the Client ID and Client Secret joined with ":"
+  // Spotify requires a base64 encoded token made of the Client ID and Client Secret joined with ":"
   const encodedToken = Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64')
   
   // Spotify auth API requires data to be sent as Content-Type x-www-form-urlencoded, so data must be converted to query string format 
@@ -24,8 +24,6 @@ const getAccessToken = async () => {
     data
   };
   
-  console.log(axios)
-
   // Make a post request with axios to Spotify to get access token with client credentials
   return axios(authOptions).then((res) => res.data.access_token ).catch(err => console.error({err}))
 }

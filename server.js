@@ -47,10 +47,10 @@ app.post("/recommendations", async (req, res) => {
     })
   }
   
-  // 1. create an instance of axios try to set up Auhtorization header on all requests
+  // 1. Create an instance of axios to apply access token to all request headers
   const http = axios.create()
   
-  // see axios docs: https://github.com/axios/axios#interceptors
+  // See axios docs: https://github.com/axios/axios#interceptors
   http.interceptors.request.use(async (config) => {
     const accessToken = await getAccessToken()
     config.headers.Authorization = `Bearer ${accessToken}`;
@@ -67,7 +67,6 @@ app.post("/recommendations", async (req, res) => {
     const result = await searchTracks(http, { track, artist })
     const { tracks } = result
     
-    // if no songs returned in search, send a 404 response
     if(!tracks || !tracks.items || !tracks.items.length ) {
       return res.status(404).send({ message: "Song not found." })
     }
