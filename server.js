@@ -48,12 +48,15 @@ app.post("/recommendations", async (req, res) => {
     })
   }
   
+  
+  const accessToken = await getAccessToken()
+  
   // 1. Create an instance of axios to apply access token to all request headers
   const http = axios.create()
   
   // See axios docs: https://github.com/axios/axios#interceptors
   http.interceptors.request.use(async (config) => {
-    const accessToken = await getAccessToken()
+    
     config.headers.Authorization = `Bearer ${accessToken}`;
     return req;
   }, (err) => {
