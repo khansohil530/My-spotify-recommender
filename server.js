@@ -77,7 +77,7 @@ app.post("/recommendations", async (req, res) => {
   let trackId;
   
   try {
-    const result = await searchTracks(http, { track, artist })
+    const result = await searchTracks(accessToken, { track, artist })
     const { tracks } = result
     
     if(!tracks || !tracks.items || !tracks.items.length ) {

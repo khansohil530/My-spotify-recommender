@@ -8,9 +8,11 @@ const searchTracks = (http, { track, artist }) => {
     method: 'get',
     url: `${BASE_URL}/search?q=track:${track}+artist:${artist}&type=track`,
   };
+  
+  console.log({config})
 
   return http(config)
-    .then((res) => res.data)
+    .then((res) => res.data).catch(e => console.log(e.message))
 }
 
 /// uses Spotify's Browse API to get song recommendations
