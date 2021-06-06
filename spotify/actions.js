@@ -10,10 +10,10 @@ const searchTracks = (http, { track, artist }) => {
   };
 
   return http(config)
-    .then((res) => res.data)
+    .then((res) => res.data).catch(e => console.log(e.request))
 }
 
-/// uses Spotify's Search API to search tracks by track name and artist
+/// uses Spotify's Browse API to get song recommendations
 const getRecommendations = (http, { trackId }) => {  
   const config = {
     method: 'get',

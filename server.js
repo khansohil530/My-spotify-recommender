@@ -61,7 +61,6 @@ app.post("/recommendations", async (req, res) => {
     return Promise.reject(err);
   });
   
-  console.log(http)
   console.log("checkpoint 2")
   
   // 2. get track id from search
