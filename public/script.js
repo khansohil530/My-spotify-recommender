@@ -28,7 +28,11 @@ const submitForm = async (event) => {
     try {
       result = await axios.post("/recommendations", { track, artist })
     }catch (err) {
-      const errMsg = err.response.data.message ? err.response.data.message : "Something went wrong"
+      let errMsg = "Something went wrong"
+      // overwrite generic error message with server error if present
+      if(err.response.data.message) {
+        errMsg = err.response.data.message 
+      } 
       return alert(errMsg)
     }
     
