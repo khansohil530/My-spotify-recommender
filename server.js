@@ -50,6 +50,8 @@ app.post("/recommendations", async (req, res) => {
     return res.status(500).send({ message: "Something went wrong when fetching access token" })
   }
   
+  console.log(accessToken)
+  
   // Create an instance of axios to apply access token to all request headers
   const http = axios.create({ headers: { 'Authorization': `Bearer ${accessToken}` }})
   
