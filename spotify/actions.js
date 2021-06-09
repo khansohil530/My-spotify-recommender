@@ -8,7 +8,7 @@ const searchTracks = async (http, { track, artist }) => {
   };
   
   return http(config)
-    .then((res) => res.data).catch(e => console.log(e.message))
+    .then((res) => res.data);
 }
 
 /// uses Spotify's Browse API to get song recommendations
