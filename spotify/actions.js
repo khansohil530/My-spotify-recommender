@@ -1,5 +1,3 @@
-const axios = require("axios")
-
 const BASE_URL = "https://api.spotify.com/v1"
 
 // uses Spotify's Search API to search tracks by track name and artist
