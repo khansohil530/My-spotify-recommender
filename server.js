@@ -68,7 +68,7 @@ app.post("/recommendations", async (req, res) => {
     trackId = tracks.items[0].id
   } catch(err) {
     console.error(err.message)
-    return res.status(500).send({ status: "error", message: "Error when searching tracks" })
+    return res.status(500).send({ message: "Error when searching tracks" })
   }
   
   // 3. get song recommendations
@@ -85,7 +85,7 @@ app.post("/recommendations", async (req, res) => {
     return res.send({ tracks })
   } catch(err) {
     console.error(err.message)
-    return res.status(500).send({ status: "error", message: "Something went wrong when fetching recommendations" })
+    return res.status(500).send({ message: "Something went wrong when fetching recommendations" })
   }
 });
 
