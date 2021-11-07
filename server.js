@@ -69,8 +69,7 @@ app.post("/recommendations", async (req, res) => {
   try {
     const result = await searchTracks(http, { artist1 });
     const { artists } = result;
-    console.log(result)
-    console.log(result.artists)
+    console.log(artists)
     if (!artists || !artists.items || !artists.items.length) {
       return res.status(404).send({ message: `Song by ${artist1} not found.` });
     }
