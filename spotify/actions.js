@@ -4,7 +4,7 @@ const BASE_URL = "https://api.spotify.com/v1"
 const searchTracks = async (http, {artist}) => {
   const config = {
     method: 'get',
-    url: `${BASE_URL}/search?q=artist:${artist}&type=artist`
+    url: `${BASE_URL}/search?q=${artist}&type=artist`
   };
   
   return http(config)

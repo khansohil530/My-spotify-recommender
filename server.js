@@ -95,6 +95,7 @@ app.post("/recommendations", async (req, res) => {
     return res.status(500).send({ message: "Error when searching tracks" });
   }
   
+  
   //   // 3. get song recommendations
   //   try {
   //     const result = await getRecommendations(http, { artistId1, artistId2, artistId3 })
