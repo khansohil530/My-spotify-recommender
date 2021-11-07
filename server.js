@@ -62,46 +62,16 @@ app.post("/recommendations", async (req, res) => {
     if(!tracks || !tracks.items || !tracks.items.length ) {
       return res.status(404).send({ message: `Song by ${artist1} not found.` })
     }
+    artistId1 = tracks.items[0].artists[0].id
+    artistId2 = tracks.items[0].artists[1].id
+    artistId3 = tracks.items[0].artists[2].id
     
     // save the first search result's trackId to a variable
-    artistId1 = tracks.items[0].id
-    console.log(artistId1)
   } catch(err) {
     console.error(err.message)
     return res.status(500).send({ message: "Error when searching tracks" })
   }
-  //artist id 2
-  try {
-    const result = await searchTracks(http, { artist2 })
-    const { tracks } = result
-    
-    if(!tracks || !tracks.items || !tracks.items.length ) {
-      return res.status(404).send({ message: `Song by ${artist2} not found.` })
-    }
-    
-    // save the first search result's trackId to a variable
-    artistId2 = tracks.items[0].id
-    console.log(artistId2)
-  } catch(err) {
-    console.error(err.message)
-    return res.status(500).send({ message: "Error when searching tracks" })
-  }
-  //artist id 3
-  try {
-    const result = await searchTracks(http, { artist3 })
-    const { tracks } = result
-    
-    if(!tracks || !tracks.items || !tracks.items.length ) {
-      return res.status(404).send({ message: `Song by ${artist3} not found.` })
-    }
-    
-    // save the first search result's trackId to a variable
-    artistId3 = tracks.items[0].id
-    console.log(artistId3)
-  } catch(err) {
-    console.error(err.message)
-    return res.status(500).send({ message: "Error when searching tracks" })
-  }
+
   
 //   // 3. get song recommendations
 //   try {
