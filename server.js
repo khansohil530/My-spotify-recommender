@@ -34,14 +34,13 @@ app.post("/recommendations", async (req, res) => {
   if(!req.body) {
     return res.status(400).send({ message: "Bad Request - must send a JSON body with track and artist" })
   }
+  const { artist1, artist2, artist3 } = req.body
   
-  const { track, artist } = req.body
-  
-  if(!track || !artist) {
+  if(!artist1 || !artist2 || !artist3) {
     return res.status(400).send({ message: "Bad Request - must pass a track and artist" })
   }
   
-  // 1. Get access token
+//   // 1. Get access token
   let accessToken
   try {
     accessToken = await getAccessToken()
@@ -50,15 +49,15 @@ app.post("/recommendations", async (req, res) => {
     return res.status(500).send({ message: "Something went wrong when fetching access token" })
   }
   
-  // Create an instance of axios to apply access token to all request headers
+//   // Create an instance of axios to apply access token to all request headers
   const http = axios.create({ headers: { 'Authorization': `Bearer ${accessToken}` }})
   
-  // 2. get track id from search
-  let trackId;
+//   // 2. get track id from search
+  let artistId1, artistId2, artistId3;
   
   try {
-    const result = await searchTracks(http, { track, artist })
-    const { tracks } = result
+    const result1 = await searchTracks(http, { artist1 })
+    const { tracks } = result1
     
     if(!tracks || !tracks.items || !tracks.items.length ) {
       return res.status(404).send({ message: `Song '${track}' by ${artist} not found.` })
@@ -71,22 +70,22 @@ app.post("/recommendations", async (req, res) => {
     return res.status(500).send({ message: "Error when searching tracks" })
   }
   
-  // 3. get song recommendations
-  try {
-    const result = await getRecommendations(http, { trackId })
-    const { tracks } = result
+//   // 3. get song recommendations
+//   try {
+//     const result = await getRecommendations(http, { trackId })
+//     const { tracks } = result
 
-    // if no songs returned in search, send a 404 response
-    if(!tracks || !tracks.length ) {
-      return res.status(404).send({ message: "No recommendations found." })
-    }
+//     // if no songs returned in search, send a 404 response
+//     if(!tracks || !tracks.length ) {
+//       return res.status(404).send({ message: "No recommendations found." })
+//     }
     
-    // Success! Send track recommendations back to client
-    return res.send({ tracks })
-  } catch(err) {
-    console.error(err.message)
-    return res.status(500).send({ message: "Something went wrong when fetching recommendations" })
-  }
+//     // Success! Send track recommendations back to client
+//     return res.send({ tracks })
+//   } catch(err) {
+//     console.error(err.message)
+//     return res.status(500).send({ message: "Something went wrong when fetching recommendations" })
+//   }
 });
 
 // after our app has been set up above, start listening on a port provided by Glitch
