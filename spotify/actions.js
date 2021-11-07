@@ -1,10 +1,10 @@
 const BASE_URL = "https://api.spotify.com/v1"
 
 // uses Spotify's Search API to search tracks by track name and artist
-const searchTracks = async (http, {artist}) => {
+const searchTracks = async (http, {artist1}) => {
   const config = {
   method: 'get',
-  url: `${BASE_URL}/search?q=Linkin%20Park&type=artist`,
+  url: `${BASE_URL}/search?q=${artist1}&type=artist`,
 };
 
 return http(config)
