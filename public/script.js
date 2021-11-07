@@ -37,16 +37,16 @@ const submitForm = async event => {
       return alert(errMsg);
     }
 
-//     const recommendations = result.data.tracks;
+    const recommendations = result.data.tracks;
 
-//     // get top 3 recommendations
-//     const topThreeRecs = recommendations.slice(0, 3);
+    // get top 3 recommendations
+    const topFiveRecs = recommendations.slice(0, 5);
 
-//     const template = handlebars.compile(templateRaw);
-//     const recommendationsHtml = template({ track, topThreeRecs });
+    const template = handlebars.compile(templateRaw);
+    const recommendationsHtml = template({ artist1, artist2, artist3, topFiveRecs });
 
 //     // set the recommendation output's inner html do the resolved temple
-//     output.innerHTML = recommendationsHtml;
+    output.innerHTML = recommendationsHtml;
   } catch (err) {
     // show a pop up error message if something goes wrong
     alert("Something went wrong. " + err.message);
@@ -67,10 +67,12 @@ const enableButton = () => {
 };
 
 const templateRaw = `
-<p>If you like "{{track}}", you'll love:</p>
-<ul>
-  {{#each topThreeRecs}}
-  <li>{{name}} - <a href="{{external_urls.spotify}}" target="_blank">Play</a></li>
-  {{/each}}
-</ul>
+<p>If you like "{{artist1}}","{{artist2}}" and "{{artist3}}", you may also like:</p>
+    <ul>
+        {{#each topFiveRecs}}
+            <li> 
+                {{name}} -<a href="{{external_urls.spotify}}">Play</a>
+            </li>
+        {{/each}}
+    </ul>
 `;
