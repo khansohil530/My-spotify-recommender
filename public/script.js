@@ -27,6 +27,7 @@ const submitForm = async event => {
     let result;
     try {
       result = await axios.post("/recommendations", { artist1, artist2, artist3 });
+      console.log(result)
     } catch (err) {
       let errMsg = "Something went wrong";
       // overwrite generic error message with server error if present
