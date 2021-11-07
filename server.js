@@ -65,7 +65,6 @@ app.post("/recommendations", async (req, res) => {
     artistId1 = tracks.items[0].artists[0].id
     artistId2 = tracks.items[0].artists[1].id
     artistId3 = tracks.items[0].artists[2].id
-    
     // save the first search result's trackId to a variable
   } catch(err) {
     console.error(err.message)
@@ -74,9 +73,11 @@ app.post("/recommendations", async (req, res) => {
 
   
 //   // 3. get song recommendations
-//   try {
-//     const result = await getRecommendations(http, { trackId })
-//     const { tracks } = result
+  try {
+    const result = await getRecommendations(http, { artistId1, artistId2, artistId3 })
+    console.log(result)
+    return res.send({message:"Ok"})
+    //     const { tracks } = result
 
 //     // if no songs returned in search, send a 404 response
 //     if(!tracks || !tracks.length ) {
@@ -85,10 +86,10 @@ app.post("/recommendations", async (req, res) => {
     
 //     // Success! Send track recommendations back to client
 //     return res.send({ tracks })
-//   } catch(err) {
-//     console.error(err.message)
-//     return res.status(500).send({ message: "Something went wrong when fetching recommendations" })
-//   }
+  } catch(err) {
+    console.error(err.message)
+    return res.status(500).send({ message: "Something went wrong when fetching recommendations" })
+  }
 });
 
 // after our app has been set up above, start listening on a port provided by Glitch

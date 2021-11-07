@@ -15,7 +15,7 @@ const searchTracks = async (http, {artist }) => {
 const getRecommendations = async (http, { artistId1, artistId2, artistId3 }) => {  
   const config = {
     method: 'get',
-    url: `${BASE_URL}/recommendations?seed_artists=${trackId}`,
+    url: `${BASE_URL}/recommendations?seed_artists=${artistId1},${artistId2},${artistId3}`,
   };
 
   return http(config)
