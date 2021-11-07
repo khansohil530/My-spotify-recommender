@@ -69,32 +69,16 @@ app.post("/recommendations", async (req, res) => {
   try {
     const result = await searchTracks(http, { artist1 });
     const { artists } = result;
-    console.log(artists.items[0])
+    console.log(result)
+    console.log(result.artists)
     if (!artists || !artists.items || !artists.items.length) {
       return res.status(404).send({ message: `Song by ${artist1} not found.` });
     }
-    artistId1 = artists.items[0].id
-    console.log(artistId1)
     // save the first search result's trackId to a variable
   } catch (err) {
     console.error(err.message);
     return res.status(500).send({ message: "Error when searching tracks" });
   }
-  try {
-    const result = await searchTracks(http, { artist2 });
-    const { artists } = result;
-    console.log(artists.items[0])
-    if (!artists || !artists.items || !artists.items.length) {
-      return res.status(404).send({ message: `Song by ${artist2} not found.` });
-    }
-    artistId2 = artists.items[0].id
-    console.log(artistId2)
-    // save the first search result's trackId to a variable
-  } catch (err) {
-    console.error(err.message);
-    return res.status(500).send({ message: "Error when searching tracks" });
-  }
-  
   
   //   // 3. get song recommendations
   //   try {
