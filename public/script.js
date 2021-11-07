@@ -17,16 +17,16 @@ const submitForm = async event => {
     // This line prevents the page from reshing on form submit. By default, a form submission event refreshes the page
     event.preventDefault();
     disableButton();
-    console.log(event)
     // get form values
     const { elements } = event.target;
-    const track = elements.track.value;
-    const artist = elements.artist.value;
+    const artist1 = elements.artist1.value;
+    const artist2 = elements.artist2.value;
+    const artist3 = elements.artist3.value;
 
-    // send a POST request to the backend /recommendations path to get song recommendations
+//     // send a POST request to the backend /recommendations path to get song recommendations
     let result;
     try {
-      result = await axios.post("/recommendations", { track, artist });
+      result = await axios.post("/recommendations", { artist1, artist2, artist3 });
     } catch (err) {
       let errMsg = "Something went wrong";
       // overwrite generic error message with server error if present
@@ -36,16 +36,16 @@ const submitForm = async event => {
       return alert(errMsg);
     }
 
-    const recommendations = result.data.tracks;
+//     const recommendations = result.data.tracks;
 
-    // get top 3 recommendations
-    const topThreeRecs = recommendations.slice(0, 3);
+//     // get top 3 recommendations
+//     const topThreeRecs = recommendations.slice(0, 3);
 
-    const template = handlebars.compile(templateRaw);
-    const recommendationsHtml = template({ track, topThreeRecs });
+//     const template = handlebars.compile(templateRaw);
+//     const recommendationsHtml = template({ track, topThreeRecs });
 
-    // set the recommendation output's inner html do the resolved temple
-    output.innerHTML = recommendationsHtml;
+//     // set the recommendation output's inner html do the resolved temple
+//     output.innerHTML = recommendationsHtml;
   } catch (err) {
     // show a pop up error message if something goes wrong
     alert("Something went wrong. " + err.message);
