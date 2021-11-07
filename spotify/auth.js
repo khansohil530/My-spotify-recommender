@@ -1,7 +1,7 @@
 const axios = require("axios")
 const qs = require("qs")
 
-const SPOTIFY_ACCESS_TOKEN_URL = "https://accounts.spotify.com/api/token"
+  const SPOTIFY_ACCESS_TOKEN_URL = "https://accounts.spotify.com/api/token"
 
 // This function uses Client Credentials to obtain an access token from Spotify
 // See Spotify auth documentation: https://developer.spotify.com/documentation/general/guides/authorization-guide/#client-credentials-flow
