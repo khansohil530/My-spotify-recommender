@@ -6,7 +6,7 @@
 const express = require("express");
 const axios = require("axios");
 const { getAccessToken } = require("./spotify/auth");
-const { searchArtist1, searchArtist2, searchArtist3, getRecommendations } = require("./spotify/actions");
+const { searchArtist, getRecommendations } = require("./spotify/actions");
 
 const BASE_URL = "https://api.spotify.com/v1";
 
@@ -65,50 +65,65 @@ app.post("/recommendations", async (req, res) => {
 
   //   // 2. get artist id from search
   let artistId1, artistId2, artistId3;
-  //artist id 1
-  try {
-    const result = await searchArtist1(http, { artist1 });
-    const { artists } = result;
-  
+
+  const getSongs = async (http, artist) => {
+    const result = await searchArtist(http,  artist)
+    // console.log(result.artists.items)
+    const artists = result.artists
+
     if (!artists || !artists.items || !artists.items.length) {
-      return res.status(404).send({ message: `Song by ${artist1} not found.` });
+      return res.status(404).send({ message: `Song by ${artist} not found.` });
     }
+    console.log(artist)
+    console.log(artists)
     // save the first search result's artistId to a variable
-    artistId1 = artists.items[0].id
-    
+    const artistId = artists.items[0].id
+    return artistId
+  }
+
+
+  try {
+    artistId1 = await getSongs(http, artist1)
+    artistId2 = await getSongs(http, artist2)
+    artistId3 = await getSongs(http, artist3)
+    // // Artist 1
+    // let result = await searchArtist(http, { artist1 });
+    // let artists = result.artists
+
+    // if (!artists || !artists.items || !artists.items.length) {
+    //   return res.status(404).send({ message: `Song by ${artist1} not found.` });
+    // }
+    // console.log(artists)
+    // // save the first search result's artistId to a variable
+    // artistId1 = artists.items[0].id
+
+    // Artist 2
+    // let result = await searchArtist(http, { artist2 })
+    // artists = await result.artists
+    // console.log(artist2)
+    // if (!artists || !artists.items || !artists.items.length) {
+    //   return res.status(404).send({ message: `Song by ${artist2} not found.` });
+    // }
+    // // save the first search result's artistId to a variable
+    // artistId2 = artists.items[0].id
+    // console.log(artists)
+
+    // Artist 3
+    // result = await searchArtist(http, { artist3 });
+    // console.log(artist3)
+    // artists = result.artists
+    // if (!artists || !artists.items || !artists.items.length) {
+    //   return res.status(404).send({ message: `Song by ${artist3} not found.` });
+    // }
+    // // save the first search result's artistId to a variable
+    // artistId3 = artists.items[0].id
+    // console.log(artists)
+
   } catch (err) {
     console.error(err.message);
     return res.status(500).send({ message: "Error when searching tracks" });
   }
-    //artist id 2
-  try {
-    const result = await searchArtist2(http, { artist2 });
-    const { artists } = result;
-  
-    if (!artists || !artists.items || !artists.items.length) {
-      return res.status(404).send({ message: `Song by ${artist2} not found.` });
-    }
-    // save the first search result's artistId to a variable
-    artistId2 = artists.items[0].id
-    
-  } catch (err) {
-    console.error(err.message);
-    return res.status(500).send({ message: "Error when searching tracks" });
-  }
-    //artist id 3
-  try {
-    const result = await searchArtist3(http, { artist3});
-    const { artists } = result;
-  
-    if (!artists || !artists.items || !artists.items.length) {
-      return res.status(404).send({ message: `Song by ${artist3} not found.` });
-    }
-    // save the first search result's artistId to a variable
-    artistId3 = artists.items[0].id
-  } catch (err) {
-    console.error(err.message);
-    return res.status(500).send({ message: "Error when searching tracks" });
-  }
+
     // 3. get song recommendations
     try {
       const result = await getRecommendations(http, { artistId1, artistId2, artistId3 })
@@ -126,9 +141,9 @@ app.post("/recommendations", async (req, res) => {
       console.error(err.message)
       return res.status(500).send({ message: "Something went wrong when fetching recommendations" })
     }
-});
+})
 
 // after our app has been set up above, start listening on a port provided by Glitch
 app.listen(process.env.PORT, () => {
-  console.log(`Example app listening at port ${process.env.PORT}`);
-});
+  console.log(`Example app listening at port ${process.env.PORT}`)
+})
